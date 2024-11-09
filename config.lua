@@ -11,6 +11,7 @@ Config = {
         'moderator',
         'helper'
     },
+	
     WebhookEnabled = true,
     WebhookLink = '', --insert your webhook link here if you want webhooks
     WebhookTitle = 'BCC-Reports',

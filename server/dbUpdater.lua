@@ -20,6 +20,12 @@ CreateThread(function()
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
     ]])
 
+    -- Alter the steamname column to support utf8mb4 encoding for special characters
+    MySQL.query.await([[ 
+        ALTER TABLE bcc_reports 
+        MODIFY steamname VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    ]])
+
     -- Print a success message to the console
     print("Database tables for \x1b[35m\x1b[1m*bcc-reports*\x1b[0m created or updated \x1b[32msuccessfully\x1b[0m.")
 end)

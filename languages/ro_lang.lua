@@ -47,10 +47,10 @@ Locales["ro_lang"] = {
     backButton = 'Inapoi',
     reportDeletedSuccessfully = 'Tichet sters cu succes',
     reportDeletionFailed = 'Stergerea tichetului a esuat',
-    charId = 'ID-ul caracterului',
-    name = 'Name',
+    charId = 'ID-ul personajului',
     playerReport = 'Tichet jucator',
     bugReport = 'Tichet bug',
     staffReport = 'Tichet personal',
-    otherReport = 'Alt tichet'
+    otherReport = 'Alt tichet',
+    name = 'Nume'
 }

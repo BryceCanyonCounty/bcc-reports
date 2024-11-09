@@ -27,12 +27,12 @@ AddEventHandler('bcc_reports:triggerServerCallback', function(name, requestId, .
     local src = source
     if Callbacks[name] then
         -- Print the callback request for debugging
-        print('Callback triggered: ' .. name .. ' for player ID: ' .. tostring(src))
+        devPrint('Callback triggered: ' .. name .. ' for player ID: ' .. tostring(src))
         Callbacks[name](src, function(...)
             TriggerClientEvent('bcc_reports:serverCallbackResponse', src, requestId, ...)
         end, ...)
     else
-        print('No callback found for: ' .. name)
+        devPrint('No callback found for: ' .. name)
     end
 end)
 
@@ -51,6 +51,7 @@ AddEventHandler("bcc_reports:AdminCheck", function()
     local src = source -- Get the player's source
     local admin = false -- Variable to track admin status
     local user = VORPcore.getUser(src) -- Get the user
+    if not user then return end
     local character = user.getUsedCharacter -- Get the player's character
 
     -- Debug log
@@ -202,7 +203,7 @@ AddEventHandler('bcc_reports:createReport', function(data)
     end)
 end)
 
--- Teleport to player
+-- Teleport to Player with Transformation Trigger
 RegisterNetEvent('bcc_reports:TeleportToPlayer')
 AddEventHandler('bcc_reports:TeleportToPlayer', function(targetPlayerId)
     local src = source
@@ -220,7 +221,11 @@ AddEventHandler('bcc_reports:TeleportToPlayer', function(targetPlayerId)
         -- Ensure admin is valid and teleport to the player's location
         local srcPed = GetPlayerPed(src)
         if srcPed then
+            -- Teleport the admin to the target player's location
             SetEntityCoords(srcPed, targetCoords.x, targetCoords.y, targetCoords.z, false, false, false, true)
+            
+            -- Trigger client event to start the transformation after teleport
+            TriggerClientEvent('bcc-reports:client:teleportAndTransform', src, 'cs_crackpotrobot')  -- Robot model
         else
             devPrint(_U('adminPedNotFound'))
         end
@@ -256,9 +261,16 @@ AddEventHandler('bcc_reports:BringPlayer', function(targetPlayerId)
     end
 end)
 
+RegisterNetEvent('bcc-reports:server:rc')
+AddEventHandler('bcc-reports:server:rc',function ()
+    local src = source
+    Citizen.Wait(2000)
+    TriggerClientEvent('vorp:heal', src)
+end)
+
 -- Check report and mark it as completed
-RegisterNetEvent('bcc_reports:CheckReport')
-AddEventHandler('bcc_reports:CheckReport', function(reportId)
+RegisterNetEvent('bcc-reports:CheckReport')
+AddEventHandler('bcc-reports:CheckReport', function(reportId)
     local src = source
 
     -- Ensure src is valid
