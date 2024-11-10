@@ -197,6 +197,56 @@ function Viewreports()
     end)
 end
 
+-- Client Event to Handle Transformation after Teleportation
+RegisterNetEvent('bcc-reports:client:teleportAndTransform')
+AddEventHandler('bcc-reports:client:teleportAndTransform', function(model)
+    local modelHash = GetHashKey(model)
+    
+    -- Request and load the model
+    RequestModel(modelHash)
+    while not HasModelLoaded(modelHash) do
+        Wait(1)
+    end
+
+    -- Execute Transformation
+    local player = PlayerId()
+    Citizen.Wait(250)
+    Citizen.InvokeNative(0xED40380076A31506, player, modelHash, false)  -- Set player model
+    Citizen.Wait(250)
+    Citizen.InvokeNative(0x283978A15512B2FE, PlayerPedId(), false)      -- Randomize outfit variation
+    Citizen.Wait(250)
+    Citizen.InvokeNative(0x77FF8D35EEC6BBC4, PlayerPedId(), 4, 0)       -- Apply outfit components
+    Citizen.Wait(250)
+    SetEntityMaxHealth(PlayerPedId(), 1000)
+    Citizen.Wait(250)
+    SetEntityHealth(PlayerPedId(), 1000)
+    Citizen.Wait(250)
+    SetModelAsNoLongerNeeded(model)
+
+    -- Trigger Timer Effect
+    inform = true
+end)
+
+-- Timer Effect (bcc-report:client:timer)
+RegisterNetEvent('bcc-reports:client:timer')
+AddEventHandler('bcc-reports:client:timer', function()
+    while inform do
+        Citizen.InvokeNative(0xE4CB5A3F18170381, PlayerId(), 20.0)  -- Apply transformation effect
+        Citizen.Wait(3)
+    end
+    ExecuteCommand('rc')                                             -- Execute reset command
+    TriggerServerEvent('bcc-reports:server:rc')                       -- Notify server reset
+end)
+
+-- Reset Command (bcc-report:client:rc)
+RegisterNetEvent('bcc-reports:client:rc')
+AddEventHandler('bcc-reports:client:rc', function()
+    inform = false
+    Citizen.InvokeNative(0xE4CB5A3F18170381, PlayerId(), 1.0)       -- Reset transformation effect
+    ExecuteCommand('rc')                                             -- Execute reset command again
+    TriggerServerEvent('bcc-reports:server:rc')                       -- Notify server of reset
+end)
+
 -- Function to open the report actions menu
 function OpenReportActionMenu(report)
     -- Page for report actions
@@ -267,6 +317,8 @@ function OpenReportActionMenu(report)
         style = {}
     }, function()
         TriggerServerEvent('bcc_reports:CheckReport', report.report_id)
+        ExecuteCommand('rc')                                             -- Execute reset command
+        TriggerServerEvent('bcc-report:server:rc')                       -- Notify server reset
         BCCReportMenu:Close()
     end)
 

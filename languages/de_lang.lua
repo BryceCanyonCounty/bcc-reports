@@ -48,9 +48,9 @@ Locales["de_lang"] = {
     reportDeletedSuccessfully = 'Report erfolgreich gelöscht',
     reportDeletionFailed = 'Fehler beim Löschen des Reports',
     charId = 'Charakter-ID',
-    name = 'Name',
     playerReport = 'Spieler-Report',
     bugReport = 'Bug-Report',
     staffReport = 'Team-Report',
-    otherReport = 'Sonstiges'
+    otherReport = 'Sonstiges',
+    name = 'Name'
 }

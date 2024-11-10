@@ -28,7 +28,7 @@ Locales["en_lang"] = {
     -- General
     newReport = 'New Report',
     newReportSubmitted = 'A new report has been submitted.',
-    
+
     -- Errors and Status Messages
     userNotFound = 'Error: User not found for source: %s',
     characterNotFound = 'Error: Character not found for user: %s',
@@ -48,9 +48,9 @@ Locales["en_lang"] = {
     reportDeletedSuccessfully = 'Report Deleted Succesfully',
     reportDeletionFailed = 'Report Deletion Failed',
     charId = 'Character ID',
-    name = 'Name',
     playerReport = 'Player Report',
     bugReport = 'Bug Report',
     staffReport = 'Staff Report',
-    otherReport = 'Other Report'
+    otherReport = 'Other Report',
+    name = 'Name'
 }
